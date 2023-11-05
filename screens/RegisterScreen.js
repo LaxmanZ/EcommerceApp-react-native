@@ -44,7 +44,7 @@ const RegisterScreen = () => {
             Create a New Account
           </Text>
 
-          <View style={{ marginTop: 50 }}>
+          <View style={{ marginTop: 40 }}>
             <View
               style={{
                 flexDirection: 'row',
