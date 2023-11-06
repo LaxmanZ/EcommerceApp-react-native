@@ -23,10 +23,10 @@ const LoginScreen = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const token = await AsyncStorage.getItem('authToke');
+        const token = await AsyncStorage.getItem('authToken');
 
         if (token) {
-          navigation.replace('main');
+          navigation.replace('Main');
         }
       } catch (err) {
         console.log('Error Message', err);
