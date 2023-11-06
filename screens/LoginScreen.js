@@ -9,7 +9,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -20,6 +20,21 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToke');
+
+        if (token) {
+          navigation.replace('main');
+        }
+      } catch (err) {
+        console.log('Error Message', err);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
   const handleLogin = () => {
     const user = { email: email, password: password };
 
@@ -29,7 +44,7 @@ const LoginScreen = () => {
         // console.log(response);
         const token = response.data.token;
         AsyncStorage.setItem('authToken', token);
-        navigation.replace('Home');
+        navigation.replace('Main');
       })
       .catch((error) => {
         Alert.alert('Login Error', 'Invalid Email');
