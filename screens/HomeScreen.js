@@ -24,8 +24,15 @@ import axios from 'axios';
 import ProductItem from '../components/ProductItem';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = () => {
+  const images = [
+    'https://img.etimg.com/thumb/msid-93051525,width-1070,height-580,imgsize-2243475,overlay-economictimes/photo.jpg',
+    'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/PD23/Launches/Updated_ingress1242x550_3.gif',
+    'https://images-eu.ssl-images-amazon.com/images/G/31/img23/Books/BB/JULY/1242x550_Header-BB-Jul23.jpg',
+  ];
+
   const navigation = useNavigation();
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
@@ -36,12 +43,6 @@ const HomeScreen = () => {
     { label: 'electronics', value: 'electronics' },
     { label: "women's clothing", value: "women's clothing" },
   ]);
-
-  const images = [
-    'https://img.etimg.com/thumb/msid-93051525,width-1070,height-580,imgsize-2243475,overlay-economictimes/photo.jpg',
-    'https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/PD23/Launches/Updated_ingress1242x550_3.gif',
-    'https://images-eu.ssl-images-amazon.com/images/G/31/img23/Books/BB/JULY/1242x550_Header-BB-Jul23.jpg',
-  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +59,9 @@ const HomeScreen = () => {
   const onGenderOpen = useCallback(() => {
     setCompanyOpen(false);
   }, []);
+
+  const cart = useSelector((state) => state.cart.cart);
+  console.log(cart);
   return (
     <SafeAreaView
       style={{
