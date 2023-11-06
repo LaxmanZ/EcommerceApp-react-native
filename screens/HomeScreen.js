@@ -183,6 +183,19 @@ const HomeScreen = () => {
         >
           {deals.map((item, i) => (
             <Pressable
+              onPress={() =>
+                navigation.navigate('ProductInfo', {
+                  id: item.id,
+                  title: item.title,
+                  price: item?.price,
+                  carouselImages: item.carouselImages,
+                  offer: item.offer,
+                  color: item?.color,
+                  size: item?.size,
+                  oldPrice: item?.oldPrice,
+                  item: item,
+                })
+              }
               key={i}
               style={{
                 marginVertical: 10,

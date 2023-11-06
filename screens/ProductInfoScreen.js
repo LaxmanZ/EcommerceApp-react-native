@@ -11,14 +11,30 @@ import {
 import React from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AntDesign, Feather, Ionicons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../redux/CartReducer';
+import { useState } from 'react';
 
 const ProductInfoScreen = () => {
   const route = useRoute();
   // console.log(route.params);
+  const [addedToCart, setAddedToCart] = useState(false);
   const { width } = Dimensions.get('window');
   const navigation = useNavigation();
   const height = (width * 100) / 100;
 
+  const cart = useSelector((state) => state.cart.cart);
+  // console.log(cart);
+  
+  const dispatch = useDispatch();
+
+  const addItemToCart = (item) => {
+    setAddedToCart(true);
+    dispatch(addToCart(item));
+    setTimeout(() => {
+      setAddedToCart(false);
+    }, 60000);
+  };
   return (
     <ScrollView
       style={{ marginTop: 40 }}
@@ -182,9 +198,10 @@ const ProductInfoScreen = () => {
       </Text>
 
       <Pressable
+        onPress={() => addItemToCart(route?.params?.item)}
         style={{
           backgroundColor: '#ffc72c',
-          padding: 10,
+          padding: 12,
           borderRadius: 20,
           justifyContent: 'center',
           alignItems: 'center',
@@ -192,13 +209,23 @@ const ProductInfoScreen = () => {
           marginVertical: 10,
         }}
       >
-        <Text style={{ fontSize: 15, fontWeight: '500' }}>Add To Cart</Text>
+        {addedToCart ? (
+          <View>
+            <Text style={{ fontSize: 15, fontWeight: '500' }}>
+              Added To Cart
+            </Text>
+          </View>
+        ) : (
+          <View>
+            <Text style={{ fontSize: 15, fontWeight: '500' }}>Add To Cart</Text>
+          </View>
+        )}
       </Pressable>
 
       <Pressable
         style={{
           backgroundColor: '#ffac1c',
-          padding: 10,
+          padding: 12,
           borderRadius: 20,
           justifyContent: 'center',
           alignItems: 'center',
