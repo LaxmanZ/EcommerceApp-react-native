@@ -11,7 +11,7 @@ const ProductItem = ({ item }) => {
   const [addedToCart, setAddedToCart] = useState(false);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
-  console.log(cart);
+  // console.log(cart);
 
   const addItemToCart = (item) => {
     setAddedToCart(true);

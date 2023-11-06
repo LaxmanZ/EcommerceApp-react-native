@@ -10,6 +10,8 @@ import { Feather, Entypo, Ionicons, AntDesign } from '@expo/vector-icons';
 import ProfileScreen from '../screens/ProfileScreen';
 import CartScreen from '../screens/CartScreen';
 import ProductInfoScreen from '../screens/ProductInfoScreen';
+import AddAddressScreen from '../screens/AddAddressScreen';
+import AddressScreen from '../screens/AddressScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -87,6 +89,16 @@ const StackNavigator = () => {
         <Stack.Screen
           name="ProductInfo"
           component={ProductInfoScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Address"
+          component={AddAddressScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Add"
+          component={AddressScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
