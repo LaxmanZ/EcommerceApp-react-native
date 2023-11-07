@@ -27,6 +27,10 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { BottomModal, ModalContent, SlideAnimation } from 'react-native-modals';
+import { UserType } from '../UserContext';
+import { useContext } from 'react';
+import jwt_decode from 'jwt-decode';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = () => {
   const images = [
@@ -46,6 +50,10 @@ const HomeScreen = () => {
     { label: "women's clothing", value: "women's clothing" },
   ]);
   const [modalVisivle, setModalVisible] = useState(false);
+  const { userId, setUserId } = useContext(UserType);
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAdress] = useState('');
+  console.log(selectedAddress);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,6 +73,36 @@ const HomeScreen = () => {
 
   const cart = useSelector((state) => state.cart.cart);
   // console.log(cart);
+
+  useEffect(() => {
+    if (userId) {
+      fetchAddresses();
+    }
+  }, [userId, modalVisivle]);
+
+  const fetchAddresses = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.0.101:8080/addresses/${userId}`
+      );
+      const { addresses } = response.data;
+
+      setAddresses(addresses);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+    };
+
+    fetchUser();
+  }, []);
+  console.log('address', addresses);
   return (
     <>
       <SafeAreaView

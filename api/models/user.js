@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
       mobileNo: String,
       houseNo: String,
       street: String,
-      landMark: String,
+      landmark: String,
       city: String,
       country: String,
       postalCode: String,

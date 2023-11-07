@@ -23,8 +23,9 @@ const ProductItem = ({ item }) => {
   return (
     <Pressable
       style={{
-        marginHorizontal: 25,
+        // marginHorizontal: 10,
         marginVertical: 25,
+        marginLeft: 25,
       }}
     >
       <Image
