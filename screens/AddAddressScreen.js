@@ -31,7 +31,7 @@ const AddAddressScreen = () => {
       console.log(error);
     }
   };
-  console.log('Addresses', addresses);
+  // console.log('Addresses', addresses);
 
   //refresh the addresses when the component comes to the focus ie basically when we navigate back
   useFocusEffect(
@@ -39,7 +39,7 @@ const AddAddressScreen = () => {
       fetchAddresses();
     }, [])
   );
-  console.log("addresses", addresses);
+  // console.log("addresses", addresses);
 
   return (
     <ScrollView style={{ marginTop: 40 }} showsVerticalScrollIndicator={false}>

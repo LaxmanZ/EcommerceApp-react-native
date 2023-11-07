@@ -16,6 +16,7 @@ import {
   EvilIcons,
   MaterialIcons,
   Ionicons,
+  Entypo,
 } from '@expo/vector-icons';
 import { SliderBox } from 'react-native-image-slider-box';
 import list from '../data/list';
@@ -53,7 +54,7 @@ const HomeScreen = () => {
   const { userId, setUserId } = useContext(UserType);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAdress] = useState('');
-  console.log(selectedAddress);
+  // console.log(selectedAddress);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,7 +103,7 @@ const HomeScreen = () => {
 
     fetchUser();
   }, []);
-  console.log('address', addresses);
+  // console.log('address', addresses);
   return (
     <>
       <SafeAreaView
@@ -156,9 +157,15 @@ const HomeScreen = () => {
           >
             <EvilIcons name="location" size={24} color="black" />
             <Pressable onPress={() => setModalVisible(!modalVisivle)}>
-              <Text style={{ fontSize: 14, fontWeight: '500' }}>
-                Deliver To Laxman - Bangalore 560035{' '}
-              </Text>
+              {selectedAddress ? (
+                <Text>
+                  Deliver To {selectedAddress?.name} - {selectedAddress?.street}
+                </Text>
+              ) : (
+                <Text style={{ fontSize: 13, fontWeight: '500' }}>
+                  Add a Address
+                </Text>
+              )}
             </Pressable>
             <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
           </Pressable>
@@ -409,6 +416,56 @@ const HomeScreen = () => {
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {/* Already Added Address  */}
+
+            {addresses?.map((item, index) => (
+              <Pressable
+                onPress={() => setSelectedAdress(item)}
+                key={index}
+                style={{
+                  width: 140,
+                  height: 140,
+                  borderColor: '#d0d0d0',
+                  marginTop: 10,
+                  borderWidth: 1,
+                  padding: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 3,
+                  marginRight: 15,
+                  backgroundColor:
+                    selectedAddress === item ? '#fbceb1' : 'white',
+                }}
+              >
+                <View
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}
+                >
+                  <Text style={{ fontSize: 13, fontWeight: 'bold' }}>
+                    {item?.name}
+                  </Text>
+                  <Entypo name="location-pin" size={24} color="red" />
+                </View>
+
+                <Text
+                  numberOfLines={1}
+                  style={{ width: 130, fontSize: 13, textAlign: 'center' }}
+                >
+                  #{item?.houseNo}, {item?.landmark}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={{ width: 130, fontSize: 13, textAlign: 'center' }}
+                >
+                  {item?.street}
+                </Text>
+
+                <Text
+                  numberOfLines={1}
+                  style={{ width: 130, fontSize: 13, textAlign: 'center' }}
+                >
+                  India, Bangalore
+                </Text>
+              </Pressable>
+            ))}
 
             <Pressable
               onPress={() => {
