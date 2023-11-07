@@ -1,9 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { ScrollView } from 'react-native';
-import { TextInput } from 'react-native';
-import { Pressable } from 'react-native';
-import { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TextInput,
+  Pressable,
+  Alert,
+} from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from 'jwt-decode';
+import { UserType } from '../UserContext';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const AddressScreen = () => {
   const [name, setName] = useState('');
@@ -12,6 +21,57 @@ const AddressScreen = () => {
   const [street, setStreet] = useState('');
   const [landmark, setLandmark] = useState('');
   const [postalCode, setPostalCode] = useState('');
+  const { userId, setUserId } = useContext(UserType);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+    };
+    fetchUser();
+  }, []);
+  console.log(userId);
+
+  const handleAddAddress = () => {
+    const address = {
+      name,
+      mobileNo,
+      houseNo,
+      street,
+      landmark,
+      postalCode,
+    };
+
+    axios
+      .post('http://192.168.0.101:8080/addresses', { userId, address })
+      .then((response) => {
+        Alert.alert('Success', 'Addresses added successfully');
+        setName('');
+        setMobileNo('');
+        setHouseNo('');
+        setStreet('');
+        setLandmark('');
+        setPostalCode('');
+
+        setTimeout(() => {
+          navigation.goBack();
+        }, 500);
+      })
+      .catch((error) => {
+        console.error('Error in Axios request:', error);
+        if (error.response) {
+          console.error('Server responded with:', error.response.data);
+        }
+        // You can also display an error message using Alert.alert()
+        Alert.alert(
+          'Error',
+          'Failed to add address. Please check server logs for details.'
+        );
+      });
+  };
   return (
     <ScrollView style={{ marginTop: 40 }}>
       <View style={{ height: 50, backgroundColor: '#00ced1' }} />
@@ -144,6 +204,7 @@ const AddressScreen = () => {
         </View>
 
         <Pressable
+          onPress={handleAddAddress}
           style={{
             backgroundColor: '#ffc72c',
             padding: 15,

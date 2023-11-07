@@ -183,7 +183,6 @@ const HomeScreen = () => {
               flexDirection: 'row',
               alignItems: 'center',
               flexWrap: 'wrap',
-              marginLeft: 12,
             }}
           >
             {deals.map((item, i) => (
