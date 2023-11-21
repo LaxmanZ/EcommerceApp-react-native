@@ -3,9 +3,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { UserType } from '../UserContext';
 import { Entypo, AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { cleanCart } from '../redux/CartReducer';
 
 const ConfirmationScreen = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
   const steps = [
     { title: 'Address', content: 'Address Form' },
     { title: 'Delivery', content: 'Delivery Options' },
@@ -42,6 +46,32 @@ const ConfirmationScreen = () => {
     }
   };
   // console.log(addresses);
+
+  const handlePlaceOrder = async () => {
+    try {
+      const orderData = {
+        userId: userId,
+        cartItems: cart,
+        totalPrice: total,
+        shippingAddress: selectedAddress,
+        paymentMethod: paymentMethod,
+      };
+
+      const response = await axios.post(
+        'http://192.168.0.102:8080/orders',
+        orderData
+      );
+      if (response.status === 200) {
+        navigation.navigate('Order');
+        dispatch(cleanCart());
+        console.log('Order Created Successfully', response.data.order);
+      } else {
+        console.log('Error creating order', response.data);
+      }
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
   return (
     <ScrollView style={{ marginTop: 40 }}>
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 40 }}>
@@ -480,7 +510,7 @@ const ConfirmationScreen = () => {
           </View>
 
           <Pressable
-            // onPress={handlePlaceOrder}
+            onPress={handlePlaceOrder}
             style={{
               backgroundColor: '#FFC72C',
               padding: 10,

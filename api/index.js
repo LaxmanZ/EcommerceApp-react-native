@@ -213,7 +213,7 @@ app.post('/orders', async (req, res) => {
 
     //create an array of Product objects from the cart Items
     const products = cartItems.map((item) => ({
-      name: item?.name,
+      name: item?.title,
       quantity: item.quantity,
       price: item.price,
       image: item.image,
