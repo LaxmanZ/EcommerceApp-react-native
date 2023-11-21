@@ -199,3 +199,74 @@ app.get('/addresses/:userId', async (req, res) => {
     res.status(500).json({ message: 'Error retrieveing the addresses' });
   }
 });
+
+//endpoint to store all the orders
+app.post('/orders', async (req, res) => {
+  try {
+    const { userId, cartItems, totalPrice, shippingAddress, paymentMethod } =
+      req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User Not Found' });
+    }
+
+    //create an array of Product objects from the cart Items
+    const products = cartItems.map((item) => ({
+      name: item?.name,
+      quantity: item.quantity,
+      price: item.price,
+      image: item.image,
+    }));
+
+    //create a new order
+    const order = new Order({
+      user: userId,
+      products: products,
+      totalPrice: totalPrice,
+      shippingAddress: shippingAddress,
+      paymentMethod: paymentMethod,
+    });
+
+    await order.save();
+    res.status(200).json({ message: 'Order Created Successfully!' });
+  } catch (error) {
+    console.log('Error While creating orders', error);
+    res.status(500).json({ message: 'Error Creating Orders' });
+  }
+});
+
+//get the user Profile
+app.get('/profile/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.log('error while getting user Profile', error);
+    res.status(500).json({ message: 'Error getting the user profile' });
+  }
+});
+
+app.get('/orders/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const orders = await Order.find({ user: userId }).populat('user');
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: 'No Orders Found for this User' });
+    }
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.log('Error while getting order', error);
+    res.status(500).json({ message: 'Error getting the order' });
+  }
+});
