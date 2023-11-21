@@ -1,4 +1,11 @@
-import { ScrollView, StyleSheet, Text, View, Pressable } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Alert,
+} from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { UserType } from '../UserContext';
@@ -68,6 +75,14 @@ const ConfirmationScreen = () => {
       } else {
         console.log('Error creating order', response.data);
       }
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
+  const pay = async () => {
+    try {
+      
     } catch (error) {
       console.log('Error', error);
     }
@@ -373,7 +388,19 @@ const ConfirmationScreen = () => {
               <AntDesign name="checkcircle" size={20} color="green" />
             ) : (
               <Entypo
-                onPress={() => setPaymentMethod('card')}
+                onPress={() => {
+                  setPaymentMethod('card');
+                  Alert.alert('UPI/Debit Cart', 'Pay Online', [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel is Pressed'),
+                    },
+                    {
+                      text: 'Ok',
+                      onPress: () => pay(),
+                    },
+                  ]);
+                }}
                 name="circle"
                 size={20}
                 color="gray"
